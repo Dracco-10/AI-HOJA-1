@@ -9,6 +9,10 @@ export class Cart {
     return this.items.get(productId) ?? 0;
   }
 
+  getEntries(): [string, number][] {
+    return Array.from(this.items.entries());
+  }
+
   addOrUpdate(productId: string, delta: number): void {
     const current = this.items.get(productId);
 
