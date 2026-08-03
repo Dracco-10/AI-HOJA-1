@@ -23,3 +23,31 @@ jobs:
 
       - name: Correr tests con cobertura
         run: npx vitest run --coverage
+
+  build-and-publish:
+    needs: test
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout código
+        uses: actions/checkout@v4
+
+      - name: Configurar Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Instalar dependencias
+        run: npm ci
+
+      - name: Compilar TypeScript a un solo archivo
+        run: npm run build
+
+      - name: Empaquetar binario
+        run: npm run package
+
+      - name: Publicar binario como artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: carrito-tui
+          path: dist/carrito-tui
